@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="王旭然 — 量化研究 | 因子挖掘 | 固收与资产配置 个人简历" />
+<title>王旭然 · 量化研究简历</title>
+<style>
+/* =========================================================
+   Design Tokens
+   ========================================================= */
+:root {
+  /* 主色 */
+  --navy-900: #0A1F3C;
+  --navy-800: #0F2A4E;
+  --navy-700: #163563;
+  --navy-100: #E8EDF5;
+
+  /* 点缀金 */
+  --gold-500: #C9A227;
+  --gold-400: #D9B84A;
+  --gold-100: #F5ECD2;
+
+  /* 中性 */
+  --bg: #FBFBFA;
+  --surface: #FFFFFF;
+  --border: #E5E7EB;
+  --border-strong: #D1D5DB;
+  --text: #1F2937;
+  --text-muted: #5B6472;
+  --text-soft: #8A93A2;
+
+  /* 排版 */
+  --font-serif: "Noto Serif SC", "Songti SC", "Source Han Serif SC", "STSong", "SimSun", Georgia, "Times New Roman", serif;
+  --font-sans: "Inter", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+
+  /* 尺寸 */
+  --max-w: 1080px;
+  --pad-x: 32px;
+  --radius: 4px;
+  --nav-h: 62px;
+
+  /* 动效 */
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+
+/* =========================================================
+   Reset & Base
+   ========================================================= */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--nav-h) + 16px); }
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 15.5px;
+  line-height: 1.8;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+h1, h2, h3, h4 { font-family: var(--font-serif); font-weight: 600; letter-spacing: 0.01em; margin: 0; }
+p { margin: 0; }
+ul { margin: 0; padding: 0; list-style: none; }
+a { color: inherit; text-decoration: none; }
+svg { display: block; }
+
+.container { max-width: var(--max-w); margin: 0 auto; padding: 0 var(--pad-x); }
+
+/* =========================================================
+   Top Nav — glass
+   ========================================================= */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--nav-h);
+  z-index: 50;
+  background: rgba(251, 251, 250, 0.72);
+  backdrop-filter: saturate(180%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+  border-bottom: 1px solid transparent;
+  transition: border-color .25s var(--ease), box-shadow .25s var(--ease), background .25s var(--ease);
+}
+.nav.scrolled {
+  border-bottom-color: var(--border);
+  box-shadow: 0 1px 0 rgba(10,31,60,.02), 0 8px 24px -18px rgba(10,31,60,.18);
+  background: rgba(251, 251, 250, 0.86);
+}
+.nav-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--pad-x);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.brand {
+  display: flex; align-items: baseline; gap: 10px;
+  font-family: var(--font-serif);
+  color: var(--navy-900);
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: .04em;
+}
+.brand .brand-mark {
+  width: 8px; height: 8px; background: var(--gold-500);
+  transform: rotate(45deg); display: inline-block;
+}
+.brand .brand-sub {
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  color: var(--text-soft);
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+.nav-links {
+  display: flex; align-items: center; gap: 4px;
+}
+.nav-links a {
+  position: relative;
+  padding: 8px 14px;
+  font-size: 13.5px;
+  color: var(--text-muted);
+  border-radius: var(--radius);
+  transition: color .2s var(--ease);
+}
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 14px; right: 14px; bottom: 3px;
+  height: 1.5px;
+  background: var(--gold-500);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform .3s var(--ease);
+}
+.nav-links a:hover { color: var(--navy-900); }
+.nav-links a.active { color: var(--navy-900); font-weight: 500; }
+.nav-links a.active::after { transform: scaleX(1); }
+
+/* =========================================================
+   Hero
+   ========================================================= */
+.hero {
+  position: relative;
+  padding: calc(var(--nav-h) + 96px) 0 0;
+  background: linear-gradient(180deg, var(--navy-900) 0%, var(--navy-800) 100%);
+  color: #E7ECF5;
+  overflow: hidden;
+}
+/* 极细 CSS 网格纹理 + 金色渐隐光线 */
+.hero::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+  background-size: 48px 48px, 48px 48px;
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 20%, #000 40%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 20%, #000 40%, transparent 100%);
+  pointer-events: none;
+}
+.hero::after {
+  content: "";
+  position: absolute;
+  top: -20%; right: -10%;
+  width: 620px; height: 620px;
+  background: radial-gradient(circle at center, rgba(201,162,39,.16) 0%, rgba(201,162,39,0) 65%);
+  pointer-events: none;
+}
+.hero-inner { position: relative; z-index: 1; }
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--gold-400);
+  margin-bottom: 24px;
+}
+.eyebrow .rule { display: inline-block; width: 36px; height: 1px; background: var(--gold-500); opacity: .7; }
+
+.hero h1 {
+  font-size: clamp(38px, 6vw, 62px);
+  line-height: 1.12;
+  color: #FFFFFF;
+  letter-spacing: .02em;
+  margin-bottom: 14px;
+}
+.hero h1 .name-en {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 15px;
+  letter-spacing: .42em;
+  color: rgba(255,255,255,.42);
+  margin-top: 12px;
+  font-weight: 400;
+}
+.hero .role {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  margin: 22px 0 28px;
+}
+.role .chip {
+  font-size: 12.5px;
+  padding: 6px 14px;
+  border: 1px solid rgba(201,162,39,.45);
+  color: var(--gold-100);
+  border-radius: 999px;
+  letter-spacing: .04em;
+  background: rgba(201,162,39,.06);
+}
+.hero .summary {
+  max-width: 780px;
+  font-size: 15.5px;
+  line-height: 1.95;
+  color: rgba(231,236,245,.78);
+  margin-bottom: 40px;
+}
+.hero .summary strong { color: #FFFFFF; font-weight: 500; }
+
+.contact-row {
+  display: flex; flex-wrap: wrap; gap: 8px 28px;
+  padding: 22px 0 40px;
+  border-top: 1px solid rgba(255,255,255,.09);
+  margin-top: 8px;
+}
+.contact-row .item {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-size: 13.5px;
+  color: rgba(231,236,245,.72);
+  letter-spacing: .02em;
+}
+.contact-row .item svg { stroke: var(--gold-400); flex-shrink: 0; }
+
+/* Hero 底部关键数据条 */
+.hero-stats {
+  margin-top: 8px;
+  border-top: 1px solid rgba(255,255,255,.09);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+.hero-stats .stat {
+  padding: 32px 24px 40px;
+  border-right: 1px solid rgba(255,255,255,.07);
+}
+.hero-stats .stat:last-child { border-right: none; }
+.hero-stats .num {
+  font-family: var(--font-serif);
+  font-size: 34px;
+  color: #FFFFFF;
+  line-height: 1;
+  margin-bottom: 10px;
+  letter-spacing: -.01em;
+}
+.hero-stats .num .unit { font-size: 14px; color: var(--gold-400); margin-left: 4px; letter-spacing: .1em; }
+.hero-stats .label {
+  font-size: 12px;
+  color: rgba(231,236,245,.55);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   Sections
+   ========================================================= */
+main { padding-bottom: 0; }
+section.block {
+  padding: 96px 0;
+  scroll-margin-top: var(--nav-h);
+}
+section.block.alt { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+.section-head { margin-bottom: 48px; }
+.section-head .idx {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--gold-500);
+  letter-spacing: .3em;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+.section-head .idx::before {
+  content: "";
+  width: 22px; height: 1px; background: var(--gold-500);
+  display: inline-block;
+}
+.section-head h2 {
+  font-size: clamp(26px, 3.4vw, 34px);
+  color: var(--navy-900);
+  line-height: 1.25;
+  letter-spacing: .01em;
+}
+.section-head .sub {
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--text-muted);
+  max-width: 620px;
+}
+
+/* Fade-in on scroll */
+.reveal { opacity: 0; transform: translateY(14px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+.reveal.in { opacity: 1; transform: none; }
+
+/* =========================================================
+   Education — two-column cards
+   ========================================================= */
+.edu-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+.edu-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--gold-500);
+  padding: 28px 30px;
+  border-radius: var(--radius);
+  transition: transform .3s var(--ease), box-shadow .3s var(--ease), border-color .3s var(--ease);
+}
+.edu-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px -18px rgba(10,31,60,.22);
+  border-left-color: var(--navy-900);
+}
+.edu-card .school {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  color: var(--navy-900);
+  margin-bottom: 6px;
+  letter-spacing: .01em;
+}
+.edu-card .major {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  margin-bottom: 18px;
+  padding-bottom: 18px;
+  border-bottom: 1px dashed var(--border);
+}
+.edu-card .period {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--gold-500);
+  letter-spacing: .1em;
+  margin-bottom: 14px;
+}
+.edu-card .courses-label {
+  font-size: 11.5px;
+  color: var(--text-soft);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.edu-card .courses {
+  font-size: 13.5px;
+  line-height: 1.85;
+  color: var(--text);
+}
+
+/* =========================================================
+   Experience — timeline
+   ========================================================= */
+.exp-item {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 40px;
+  padding: 34px 0;
+  border-top: 1px solid var(--border);
+}
+.exp-item:first-of-type { border-top: none; padding-top: 8px; }
+.exp-item:last-child { padding-bottom: 0; }
+
+.exp-aside .period {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--gold-500);
+  letter-spacing: .08em;
+  margin-bottom: 12px;
+}
+.exp-aside .org {
+  font-family: var(--font-serif);
+  font-size: 19px;
+  color: var(--navy-900);
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+.exp-aside .role {
+  font-size: 13px;
+  color: var(--text-muted);
+  letter-spacing: .02em;
+}
+.exp-aside .tags {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-top: 16px;
+}
+.exp-aside .tags span {
+  font-size: 11px;
+  padding: 3px 9px;
+  background: var(--navy-100);
+  color: var(--navy-800);
+  border-radius: 2px;
+  letter-spacing: .04em;
+}
+
+.exp-body ul li {
+  position: relative;
+  padding-left: 22px;
+  margin-bottom: 12px;
+  font-size: 14.5px;
+  line-height: 1.85;
+  color: var(--text);
+}
+.exp-body ul li:last-child { margin-bottom: 0; }
+.exp-body ul li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: .85em;
+  width: 10px; height: 1px;
+  background: var(--gold-500);
+}
+.exp-body ul li b { color: var(--navy-900); font-weight: 600; }
+.exp-body .lead {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  color: var(--navy-800);
+  margin-bottom: 14px;
+  letter-spacing: .01em;
+}
+
+/* =========================================================
+   Projects
+   ========================================================= */
+.project {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 36px 38px;
+  margin-bottom: 26px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .3s var(--ease), box-shadow .3s var(--ease);
+}
+.project:hover { border-color: var(--border-strong); box-shadow: 0 14px 40px -24px rgba(10,31,60,.2); }
+.project::before {
+  content: "";
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 2px;
+  background: linear-gradient(90deg, var(--navy-900) 0%, var(--gold-500) 60%, transparent 100%);
+}
+.project-head {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+.project-code {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--gold-500);
+  letter-spacing: .2em;
+}
+.project h3 {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  color: var(--navy-900);
+  line-height: 1.4;
+  margin-bottom: 8px;
+  letter-spacing: .005em;
+}
+.project .meta {
+  display: flex; flex-wrap: wrap; gap: 18px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  padding-bottom: 20px;
+  margin-bottom: 22px;
+  border-bottom: 1px dashed var(--border);
+}
+.project .meta .dot::before {
+  content: "·"; margin-right: 6px; color: var(--gold-500);
+}
+.project ul li {
+  position: relative;
+  padding-left: 20px;
+  font-size: 14.5px;
+  line-height: 1.85;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.project ul li::before {
+  content: "";
+  position: absolute;
+  left: 4px; top: .82em;
+  width: 5px; height: 5px;
+  border: 1px solid var(--gold-500);
+  transform: rotate(45deg);
+}
+.project ul li b { color: var(--navy-900); font-weight: 600; }
+
+/* 数据卡片 */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 26px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.stat-grid .cell {
+  padding: 18px 16px;
+  background: linear-gradient(180deg, #FCFBF7 0%, #FFFFFF 100%);
+  border: 1px solid var(--gold-100);
+  border-radius: var(--radius);
+}
+.stat-grid .cell .v {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  color: var(--navy-900);
+  line-height: 1;
+  margin-bottom: 8px;
+  letter-spacing: -.01em;
+}
+.stat-grid .cell .v .u { font-size: 12px; color: var(--gold-500); margin-left: 3px; }
+.stat-grid .cell .k {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  letter-spacing: .06em;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   Certificates — grid
+   ========================================================= */
+.cert-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.cert {
+  background: var(--surface);
+  padding: 24px 24px;
+  display: flex; align-items: flex-start; gap: 14px;
+  transition: background .25s var(--ease);
+}
+.cert:hover { background: #FCFBF7; }
+.cert .badge {
+  flex-shrink: 0;
+  width: 32px; height: 32px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--gold-500);
+  border-radius: 50%;
+  color: var(--gold-500);
+}
+.cert .txt { flex: 1; }
+.cert .name {
+  font-size: 14px;
+  color: var(--navy-900);
+  font-weight: 500;
+  line-height: 1.55;
+  margin-bottom: 4px;
+}
+.cert .year {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--text-soft);
+  letter-spacing: .1em;
+}
+.cert.highlight { background: linear-gradient(180deg, #FCF9EE 0%, #FFFFFF 100%); }
+.cert.highlight .badge { background: var(--gold-500); color: #FFFFFF; border-color: var(--gold-500); }
+
+/* =========================================================
+   Skills
+   ========================================================= */
+.skill-group {
+  padding: 28px 0;
+  border-top: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+.skill-group:first-of-type { border-top: none; padding-top: 8px; }
+.skill-group .cat {
+  display: flex; align-items: center; gap: 12px;
+  font-family: var(--font-serif);
+  font-size: 17px;
+  color: var(--navy-900);
+  letter-spacing: .02em;
+}
+.skill-group .cat .icon {
+  width: 30px; height: 30px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border-strong);
+  border-radius: 2px;
+  color: var(--gold-500);
+}
+.skill-group .items {
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+.skill-group .items span {
+  font-size: 13px;
+  padding: 6px 13px;
+  border: 1px solid var(--border-strong);
+  border-radius: 2px;
+  color: var(--text);
+  background: var(--surface);
+  transition: all .22s var(--ease);
+  letter-spacing: .01em;
+}
+.skill-group .items span:hover {
+  border-color: var(--navy-900);
+  color: var(--navy-900);
+  background: #FCFBF7;
+  transform: translateY(-1px);
+}
+.skill-group .items span.gold {
+  border-color: var(--gold-500);
+  color: var(--gold-500);
+  background: #FCF9EE;
+}
+
+/* =========================================================
+   Footer
+   ========================================================= */
+.footer {
+  background: var(--navy-900);
+  color: rgba(231,236,245,.7);
+  padding: 56px 0 40px;
+  position: relative;
+  overflow: hidden;
+}
+.footer::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size: 100% 48px;
+  pointer-events: none;
+}
+.footer-inner {
+  position: relative;
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end;
+  gap: 24px;
+}
+.footer .name {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  color: #FFFFFF;
+  letter-spacing: .04em;
+  margin-bottom: 8px;
+}
+.footer .tagline {
+  font-size: 13px;
+  color: rgba(231,236,245,.55);
+  letter-spacing: .1em;
+}
+.footer .tagline .sep { color: var(--gold-500); margin: 0 8px; }
+.footer .copyright {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: rgba(231,236,245,.4);
+  letter-spacing: .1em;
+  text-align: right;
+}
+.footer .copyright .rule {
+  display: block;
+  width: 40px; height: 1px;
+  background: var(--gold-500);
+  margin: 0 0 12px auto;
+  opacity: .6;
+}
+
+/* =========================================================
+   Responsive
+   ========================================================= */
+@media (max-width: 900px) {
+  :root { --pad-x: 22px; --nav-h: 56px; }
+  .nav-links { display: none; }
+  .brand .brand-sub { display: none; }
+  section.block { padding: 68px 0; }
+  .hero { padding-top: calc(var(--nav-h) + 68px); }
+  .edu-grid { grid-template-columns: 1fr; }
+  .exp-item { grid-template-columns: 1fr; gap: 18px; padding: 26px 0; }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .hero-stats { grid-template-columns: repeat(2, 1fr); }
+  .hero-stats .stat { border-right: none; border-bottom: 1px solid rgba(255,255,255,.07); padding: 22px 18px 26px; }
+  .hero-stats .stat:nth-child(odd) { border-right: 1px solid rgba(255,255,255,.07); }
+  .cert-grid { grid-template-columns: 1fr; }
+  .skill-group { grid-template-columns: 1fr; gap: 14px; padding: 22px 0; }
+  .project { padding: 26px 22px; }
+  .footer-inner { flex-direction: column; align-items: flex-start; }
+  .footer .copyright { text-align: left; }
+  .footer .copyright .rule { margin: 0 0 12px 0; }
+}
+
+@media (max-width: 480px) {
+  body { font-size: 15px; }
+  .hero h1 { font-size: 34px; }
+  .hero-stats { grid-template-columns: 1fr; }
+  .hero-stats .stat:nth-child(odd) { border-right: none; }
+  .stat-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* =========================================================
+   Print
+   ========================================================= */
+@media print {
+  :root { --bg: #FFFFFF; --surface: #FFFFFF; }
+  body { background: #FFFFFF; color: #000000; font-size: 11pt; line-height: 1.55; }
+  .nav, .footer { display: none !important; }
+  .hero {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    padding: 24px 0 20px !important;
+  }
+  .hero::before, .hero::after { display: none !important; }
+  .hero h1 { color: #000000 !important; font-size: 24pt; }
+  .hero h1 .name-en { color: #333 !important; }
+  .hero .summary { color: #222 !important; }
+  .contact-row { border-top-color: #CCC !important; }
+  .contact-row .item { color: #222 !important; }
+  .contact-row .item svg { stroke: #000 !important; }
+  .role .chip { color: #000 !important; border-color: #999 !important; background: #FFF !important; }
+  .hero-stats { border-top-color: #CCC !important; }
+  .hero-stats .stat { border-right-color: #DDD !important; padding: 14px 12px; }
+  .hero-stats .num { color: #000 !important; font-size: 18pt; }
+  .hero-stats .num .unit { color: #333 !important; }
+  .hero-stats .label { color: #333 !important; }
+  section.block { padding: 20px 0 !important; page-break-inside: avoid; }
+  section.block.alt { background: #FFFFFF !important; border: none !important; }
+  .section-head { margin-bottom: 16px; }
+  .section-head h2 { color: #000 !important; font-size: 16pt; }
+  .section-head .idx { color: #000 !important; }
+  .section-head .idx::before { background: #000 !important; }
+  .edu-card, .project {
+    background: #FFFFFF !important;
+    border: 1px solid #999 !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+    padding: 14px 16px;
+  }
+  .edu-card { border-left: 3px solid #000 !important; }
+  .project::before { background: #000 !important; }
+  .cert-grid { background: #FFF !important; border-color: #999 !important; }
+  .cert { background: #FFF !important; border-bottom: 1px solid #DDD; page-break-inside: avoid; }
+  .cert.highlight { background: #FFF !important; }
+  .cert.highlight .badge { background: #FFF !important; color: #000 !important; }
+  .stat-grid .cell { background: #FFF !important; border-color: #BBB !important; }
+  .reveal { opacity: 1 !important; transform: none !important; }
+  a { color: #000 !important; text-decoration: none !important; }
+  .container { max-width: 100%; padding: 0 12mm; }
+  .exp-item, .skill-group { page-break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<!-- =========================================================
+     Top Navigation
+     ========================================================= -->
+<nav class="nav" id="nav" aria-label="主导航">
+  <div class="nav-inner">
+    <a href="#hero" class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span>王旭然</span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#education" data-target="education">教育背景</a>
+      <a href="#experience" data-target="experience">实习经历</a>
+      <a href="#projects" data-target="projects">项目经历</a>
+      <a href="#certificates" data-target="certificates">证书奖项</a>
+      <a href="#skills" data-target="skills">专业技能</a>
+    </div>
+  </div>
+</nav>
+
+<!-- =========================================================
+     Hero
+     ========================================================= -->
+<header class="hero" id="hero">
+  <div class="container hero-inner">
+    <div class="eyebrow">
+      <span class="rule"></span>
+    </div>
+
+    <h1>
+      王旭然
+      <span class="name-en">WANG&nbsp;XU&nbsp;RAN</span>
+    </h1>
+
+    <div class="role" aria-label="方向标签">
+      <span class="chip">量化研究</span>
+      <span class="chip">因子挖掘</span>
+      <span class="chip">固收与资产配置</span>
+    </div>
+
+    <p class="summary">
+      <strong>上海对外经贸大学数字经济硕士在读</strong>，聚焦量化因子挖掘与策略开发。
+      具备从数据获取、因子构建、有效性检验到组合优化的<strong>端到端研究能力</strong>，
+      覆盖行业轮动、量化择时、Tick 级微观结构因子与强化学习自动因子挖掘，
+      熟悉 <strong>PIT 合规体系</strong>与回测防前视偏差处理。
+    </p>
+
+    <!-- 联系方式（占位符） -->
+    <div class="contact-row">
+      <span class="item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="1.5"/><path d="m3 6 9 7 9-7"/></svg>
+        421172168@qq.com
+      </span>
+      <span class="item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 4.5h4l2 5-2.5 1.5a12 12 0 0 0 5 5L14.5 13l5 2v4a1.5 1.5 0 0 1-1.6 1.5A16.5 16.5 0 0 1 3 6.1 1.5 1.5 0 0 1 4.5 4.5Z"/></svg>
+        +86 13719920626
+      </span>
+      <span class="item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+        上海
+      </span>
+      <span class="item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6.5v5.2c0 4.6 3.3 8.7 8 9.3 4.7-.6 8-4.7 8-9.3V6.5L12 3Z"/><path d="m9 12 2 2 4-4"/></svg>
+        CFA Level I Passed
+      </span>
+    </div>
+
+    <!-- 关键数据条 -->
+    <div class="hero-stats" aria-label="关键量化数据">
+      <div class="stat">
+        <div class="num">78<span class="unit">+</span></div>
+        <div class="label">入池因子数</div>
+      </div>
+      <div class="stat">
+        <div class="num">2.6<span class="unit">%</span></div>
+        <div class="label">无效表达式占比</div>
+      </div>
+      <div class="stat">
+        <div class="num">20</div>
+        <div class="label">期 RPN 序列上限</div>
+      </div>
+      <div class="stat">
+        <div class="num">P99</div>
+        <div class="label">延迟分位评估</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- =========================================================
+     Education
+     ========================================================= -->
+<section class="block" id="education">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="idx">01 · Education</div>
+      <h2>教育背景</h2>
+      <p class="sub">数字经济与金融学复合训练，量化研究与宏观经济分析并重。</p>
+    </div>
+
+    <div class="edu-grid">
+      <article class="edu-card reveal">
+        <div class="period">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          2025.09 — 2027.07
+        </div>
+        <div class="school">上海对外经贸大学</div>
+        <div class="major">数字经济 · 全日制硕士</div>
+        <div class="courses-label">主要课程</div>
+        <p class="courses">Python 量化投资 · Python 程序设计 · 金融统计与机器学习 · 开源项目运营管理 · AI 金融研究 · 数据分析与经济决策</p>
+      </article>
+
+      <article class="edu-card reveal">
+        <div class="period">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          2019.09 — 2023.07
+        </div>
+        <div class="school">吉林大学珠海学院</div>
+        <div class="major">金融学 · 全日制本科</div>
+        <div class="courses-label">主要课程</div>
+        <p class="courses">宏观经济学 · 微观经济学 · 国际金融 · 证券投资学 · 货币金融学 · 中央银行学 · 计量经济学 · 金融工程</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     Experience
+     ========================================================= -->
+<section class="block alt" id="experience">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="idx">02 · Experience</div>
+      <h2>实习经历</h2>
+      <p class="sub">从买方研究到 Tick 级微观结构，覆盖策略开发、基金评价与执行质量分析。</p>
+    </div>
+
+    <!-- 基煜基金 -->
+    <article class="exp-item reveal">
+      <aside class="exp-aside">
+        <div class="period">2025.11 — 2026.08</div>
+        <div class="org">上海基煜基金</div>
+        <div class="role">研究部实习生 · 量化 / 固收</div>
+        <div class="tags">
+          <span>行业轮动</span><span>量化择时</span><span>基金池</span><span>研究报告</span>
+        </div>
+      </aside>
+      <div class="exp-body">
+        <ul>
+          <li><b>行业轮动策略开发</b>：基于聚源 / Wind 完成行情与基本面数据取数，构建行业动量、景气、估值三类因子，通过 <b>IC / ICIR 检验</b>、多空组合收益与衰减分析完成因子筛选，采用等权与 ICIR 加权完成多因子合成。</li>
+          <li><b>量化择时模型</b>：结合趋势、波动率与资金流指标搭建行业层面择时信号，进行历史样本回测与信号稳定性验证，输出可复用的择时打分模板。</li>
+          <li><b>基金池维护</b>：从夏普、最大回撤、卡玛比率、信息比率四个维度对候选基金进行归因打分，并对固收类产品做<b>持仓回归剥离</b>，识别真实久期与信用暴露，形成月度基金池调整建议。</li>
+          <li><b>研究报告</b>：撰写科技行业基本面研究、A 股龙头公司盈利与估值比较、以及"量化 + 基本面"交叉验证报告，为投研例会提供决策支持。</li>
+        </ul>
+      </div>
+    </article>
+
+    <!-- 前路有光 -->
+    <article class="exp-item reveal">
+      <aside class="exp-aside">
+        <div class="period">2026.09 — 至今</div>
+        <div class="org">上海前路有光数字科技有限公司</div>
+        <div class="role">实习生 · Tick 级因子与执行质量</div>
+        <div class="tags">
+          <span>Level-2</span><span>微观结构</span><span>T0 执行</span><span>Streamlit</span>
+        </div>
+      </aside>
+      <div class="exp-body">
+        <ul>
+          <li><b>Tick 级因子库构建</b>：基于 <b>XLight API</b> 获取 Level-2 行情，构建订单簿不平衡 (OBI)、主动买卖比、撤单强度、价差与深度等微观结构因子，形成分钟级与 Tick 级两套因子快照。</li>
+          <li><b>T0 策略执行质量评估</b>：对算法执行链路做分段延迟拆解与滑点分布分析，输出 <b>P50 / P99</b> 延迟分位、单笔盈亏、胜率、换手率与容量上限，定位执行链路瓶颈。</li>
+          <li><b>数据管道与看板</b>：使用 Python (pandas / numpy) + XLight SDK 构建因子生产管道，基于 <b>Streamlit</b> 搭建归因看板，支持因子表现、执行质量与滑点分布的交互式诊断。</li>
+        </ul>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- =========================================================
+     Projects
+     ========================================================= -->
+<section class="block" id="projects">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="idx">03 · Projects</div>
+      <h2>项目经历</h2>
+      <p class="sub">强化学习 × 大语言模型驱动的自动因子挖掘，端到端可复现研究框架。</p>
+    </div>
+
+    <!-- Project 1: AG-RL-LF -->
+    <article class="project reveal">
+      <div class="project-head">
+        <div>
+          <div class="project-code">PROJECT · 01</div>
+          <h3>AG-RL-LF · 基于强化学习与大语言模型的自动因子挖掘系统</h3>
+        </div>
+      </div>
+      <div class="meta">
+        <span>负责人</span>
+        <span class="dot">2026.05 — 至今</span>
+        <span class="dot">MaskablePPO · Transformer · GLM-5.2</span>
+      </div>
+      <ul>
+        <li><b>数据与合规底座</b>：基于 Tushare 构建沪深 300 成分股数据库，完成 <b>PIT (Point-in-Time) 对齐</b>、成分股掩码、停牌与涨跌停剔除，杜绝前视偏差。</li>
+        <li><b>动作空间设计</b>：以 RPN (逆波兰) 序列表达因子，最大长度 20，配合<b>栈深度动作掩码</b>确保生成表达式语法合法，将无效表达式比例从 <b>90% 降至 2.6%</b>。</li>
+        <li><b>模型与消融</b>：采用 <b>MaskablePPO + Transformer</b> 作为策略网络，以 ICIR 最大化为奖励目标，与 MLP / LSTM 基线做消融对比，验证注意力结构对因子挖掘的增益。</li>
+        <li><b>AlphaPool 机制</b>：设计容量 K=10 的因子池，通过相关性与增量 ICIR 双重门槛控制入池，完成 K 参数消融，确认 K=10 为收益与多样性的平衡点。</li>
+        <li><b>LLM 三阶段注入</b>：集成 <b>GLM-5.2</b>，在热启动 (20 条种子因子)、每 3k 步周期性注入、异常响应三个节点向 RL 策略提供先验表达式，显著加速收敛。</li>
+      </ul>
+
+      <div class="stat-grid" aria-label="项目关键指标">
+        <div class="cell">
+          <div class="v">2.6<span class="u">%</span></div>
+          <div class="k">无效表达式比例<br/>(基线 90%)</div>
+        </div>
+        <div class="cell">
+          <div class="v">20</div>
+          <div class="k">RPN 序列<br/>最大长度</div>
+        </div>
+        <div class="cell">
+          <div class="v">10</div>
+          <div class="k">AlphaPool<br/>容量 K</div>
+        </div>
+        <div class="cell">
+          <div class="v">3k</div>
+          <div class="k">LLM 注入<br/>步长间隔</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Project 2: BigAlphaAI -->
+    <article class="project reveal">
+      <div class="project-head">
+        <div>
+          <div class="project-code">PROJECT · 02</div>
+          <h3>BigAlphaAI · 因子挖掘大赛</h3>
+        </div>
+      </div>
+      <div class="meta">
+        <span>组长</span>
+        <span class="dot">2026.07 — 至今</span>
+        <span class="dot">RL + LLM · 中证 1000 · 月频</span>
+      </div>
+      <ul>
+        <li><b>数据与切分</b>：使用 2019—2024 全区间数据，训练集 2019—2023 / 验证集 2024；将中证 1000 分钟数据聚合为月频，严格 PIT，所有调参与拟合仅在训练集完成。</li>
+        <li><b>因子生成与预处理</b>：采用 <b>RL + LLM</b> 联合生成候选因子表达式，统一做极值处理、Z-Score 标准化与行业中性化，避免风格与行业暴露污染 IC。</li>
+        <li><b>三道入池门槛</b>：设定相关性、增量 ICIR、最小 IC 三道门槛，逐层过滤冗余与弱因子，最终累计 <b>78 个入池因子</b>，覆盖资金、动量、财务、反转四大类。</li>
+        <li><b>LLM 因子注入管线</b>：搭建 API 对接、超时治理与密钥脱敏的完整管线；LLM 因子通过率 <b>5/8</b>，显著优于随机采样基线 <b>1/6</b>，验证大模型在因子构思上的先验价值。</li>
+      </ul>
+
+      <div class="stat-grid" aria-label="项目关键指标">
+        <div class="cell">
+          <div class="v">78</div>
+          <div class="k">累计入池因子</div>
+        </div>
+        <div class="cell">
+          <div class="v">5<span class="u">/8</span></div>
+          <div class="k">LLM 因子<br/>通过率</div>
+        </div>
+        <div class="cell">
+          <div class="v">1<span class="u">/6</span></div>
+          <div class="k">随机采样<br/>基线通过率</div>
+        </div>
+        <div class="cell">
+          <div class="v">3</div>
+          <div class="k">入池门槛<br/>相关性·ICIR·IC</div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- =========================================================
+     Certificates
+     ========================================================= -->
+<section class="block alt" id="certificates">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="idx">04 · Credentials</div>
+      <h2>证书与奖项</h2>
+      <p class="sub">金融执业资格全覆盖，学科竞赛与创新创业多维度验证。</p>
+    </div>
+
+    <div class="cert-grid reveal">
+      <div class="cert highlight">
+        <span class="badge" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6.5v5.2c0 4.6 3.3 8.7 8 9.3 4.7-.6 8-4.7 8-9.3V6.5L12 3Z"/><path d="m9 12 2 2 4-4"/></svg>
+        </span>
+        <div class="txt">
+          <div class="name">CFA Level I Passed</div>
+          <div class="year">2022.11</div>
+        </div>
+      </div>
+
+      <div class="cert">
+        <span class="badge" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M8 10h8M8 14h5"/></svg>
+        </span>
+        <div class="txt">
+          <div class="name">证券从业资格证</div>
+          <div class="year">2020.08</div>
+        </div>
+      </div>
+
+      <div class="cert">
+        <span class="badge" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M8 10h8M8 14h5"/></svg>
+        </span>
+        <div class="txt">
+          <div class="name">基金从业资格证</div>
+          <div class="year">2020.09</div>
+        </div>
+      </div>
+
+      <div class="cert">
+        <span class="badge" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M8 10h8M8 14h5"/></svg>
+        </span>
+        <div class="txt">
+          <div class="name">证券分析师资格证</div>
+          <div class="year">2021.04</div>
+        </div>
+      </div>
+
+      <div class="cert">
+        <span class="badge" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M8 10h8M8 14h5"/></svg>
+        </span>
+        <div class="txt">
+          <div class="name">证券投资顾问资格证</div>
+          <div class="year">2021.12</div>
+        </div>
+      </div>
+
+      <div class="cert">
+        <span class="badge" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+        </span>
+        <div class="txt">
+          <div class="name">CET-6 大学英语六级</div>
+          <div class="year">2021.08</div>
+        </div>
+      </div>
+
+      <div class="cert">
+        <span class="badge" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"/><path d="m8.5 13-1.5 8 5-3 5 3-1.5-8"/></svg>
+        </span>
+        <div class="txt">
+          <div class="name">全国高校商业精英国际竞赛 · 英语组二等奖</div>
+          <div class="year">2021.05</div>
+        </div>
+      </div>
+
+      <div class="cert">
+        <span class="badge" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"/><path d="m8.5 13-1.5 8 5-3 5 3-1.5-8"/></svg>
+        </span>
+        <div class="txt">
+          <div class="name">全国大学生创新创业竞赛 · 铜奖</div>
+          <div class="year">2021.11</div>
+        </div>
+      </div>
+
+      <div class="cert">
+        <span class="badge" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"/><path d="m8.5 13-1.5 8 5-3 5 3-1.5-8"/></svg>
+        </span>
+        <div class="txt">
+          <div class="name">全国大学生挑战杯校赛 · 优秀奖</div>
+          <div class="year">2022.06</div>
+        </div>
+      </div>
+
+      <div class="cert">
+        <span class="badge" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 8l7-5 7 5M5 16l7 5 7-5"/></svg>
+        </span>
+        <div class="txt">
+          <div class="name">校级奖学金 · 连续三年</div>
+          <div class="year">2019 — 2022</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     Skills
+     ========================================================= -->
+<section class="block" id="skills">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="idx">05 · Toolkit</div>
+      <h2>专业技能</h2>
+      <p class="sub">编程、量化研究方法、模型工具与金融建模四线并进。</p>
+    </div>
+
+    <div class="reveal">
+      <div class="skill-group">
+        <div class="cat">
+          <span class="icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 5l-4 14"/></svg>
+          </span>
+          编程与数据
+        </div>
+        <div class="items">
+          <span class="gold">Python</span><span class="gold">SQL</span><span>pandas / numpy</span><span>Streamlit</span><span>Eviews</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <div class="cat">
+          <span class="icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-6 4 3 5-8 4 5"/><path d="M3 21h18"/></svg>
+          </span>
+          量化与研究方法
+        </div>
+        <div class="items">
+          <span class="gold">因子挖掘</span><span class="gold">IC / ICIR 检验</span><span>多因子合成</span><span>行业轮动</span><span>量化择时</span><span>PIT 对齐</span><span>回测防前视</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <div class="cat">
+          <span class="icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
+          </span>
+          模型与工具
+        </div>
+        <div class="items">
+          <span class="gold">强化学习 PPO</span><span class="gold">Transformer</span><span>AI 大模型应用</span><span>Prompt 工程</span><span>Level-2 行情处理</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <div class="cat">
+          <span class="icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="1.5"/><path d="M8 20h8M12 18v2"/><path d="M7 14l3-3 2 2 4-4"/></svg>
+          </span>
+          办公与金融建模
+        </div>
+        <div class="items">
+          <span class="gold">Excel · 金融建模</span><span class="gold">Word</span><span>PowerPoint</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- =========================================================
+     Footer
+     ========================================================= -->
+<footer class="footer" id="footer">
+  <div class="container footer-inner">
+    <div>
+      <div class="name">王旭然</div>
+      <div class="tagline">
+        量化研究<span class="sep">·</span>因子挖掘<span class="sep">·</span>固收与资产配置
+      </div>
+    </div>
+    <div class="copyright">
+      <span class="rule"></span>
+      © <span id="year">2026</span> WANG XU RAN · ALL RIGHTS RESERVED
+    </div>
+  </div>
+</footer>
+
+<script>
+/* =========================================================
+   1) 当前年份
+   ========================================================= */
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* =========================================================
+   2) 导航滚动样式
+   ========================================================= */
+const nav = document.getElementById('nav');
+const onScroll = () => {
+  if (window.scrollY > 8) nav.classList.add('scrolled');
+  else nav.classList.remove('scrolled');
+};
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+/* =========================================================
+   3) IntersectionObserver — 淡入 + 导航高亮
+   ========================================================= */
+// 3.1 淡入
+const revealEls = document.querySelectorAll('.reveal');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      revealObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+revealEls.forEach(el => revealObs.observe(el));
+
+// 3.2 导航高亮当前区块
+const navLinks = document.querySelectorAll('#navLinks a');
+const sections = Array.from(navLinks).map(a => document.getElementById(a.dataset.target)).filter(Boolean);
+const setActive = (id) => {
+  navLinks.forEach(a => a.classList.toggle('active', a.dataset.target === id));
+};
+const sectionObs = new IntersectionObserver((entries) => {
+  // 选可见比例最大的一个作为当前区块
+  const visible = entries
+    .filter(e => e.isIntersecting)
+    .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+  if (visible) setActive(visible.target.id);
+}, { threshold: [0.15, 0.35, 0.6], rootMargin: '-80px 0px -45% 0px' });
+sections.forEach(s => sectionObs.observe(s));
+
+/* =========================================================
+   4) 导航点击平滑滚动（兼容固定头高度）
+   ========================================================= */
+navLinks.forEach(a => {
+  a.addEventListener('click', (ev) => {
+    const target = document.getElementById(a.dataset.target);
+    if (!target) return;
+    ev.preventDefault();
+    const y = target.getBoundingClientRect().top + window.scrollY - (parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) + 12);
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  });
+});
+</script>
+
+</body>
+</html>
